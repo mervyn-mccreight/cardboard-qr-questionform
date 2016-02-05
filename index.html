@@ -39,12 +39,21 @@
             </div>
 
             <div class="panel-body">
-              <form role="form">
+              <form role="form" action="process.php" method="post">
+
+                <!-- TODO: The ID should probably not be changeable by the end user -->
+                <div class="form-group">
+                  <div class="input-group">
+                    <span class="input-group-addon" id="question-id">ID</span>
+                    <input type="text" class="form-control" placeholder="ID der Frage" aria-describedby="ID" name="questionId">
+                  </div>
+                </div>
+
                 <div class="form-group">
                   <div class="page-header text-center">
                     <h4>Fragetext</h4>
                   </div>
-                  <textarea class="form-control" rows="5" id="question-content"></textarea>
+                  <textarea class="form-control" rows="5" id="question-content" name="question"></textarea>
                 </div>
 
                   <div class="page-header text-center">
@@ -54,28 +63,28 @@
                   <div class="form-group">
                     <div class="input-group">
                       <span class="input-group-addon" id="answer-1">Antwort 1</span>
-                      <input type="text" class="form-control" placeholder="Bitte Text hier eingeben..." aria-describedby="Antwort 1">
+                      <input type="text" class="form-control" placeholder="Bitte Text hier eingeben..." aria-describedby="Antwort 1" name="answer1">
                     </div>
                   </div>
 
                   <div class="form-group">
                     <div class="input-group">
                       <span class="input-group-addon" id="answer-2">Antwort 2</span>
-                      <input type="text" class="form-control" placeholder="Bitte Text hier eingeben..." aria-describedby="Antwort 2">
+                      <input type="text" class="form-control" placeholder="Bitte Text hier eingeben..." aria-describedby="Antwort 2" name="answer2">
                     </div>
                   </div>
 
                   <div class="form-group">
                     <div class="input-group">
                       <span class="input-group-addon" id="answer-3">Antwort 3</span>
-                      <input type="text" class="form-control" placeholder="Bitte Text hier eingeben..." aria-describedby="Antwort 3">
+                      <input type="text" class="form-control" placeholder="Bitte Text hier eingeben..." aria-describedby="Antwort 3" name="answer3">
                     </div>
                   </div>
 
                   <div class="form-group">
                     <div class="input-group">
                       <span class="input-group-addon" id="answer-4">Antwort 4</span>
-                      <input type="text" class="form-control" placeholder="Bitte Text hier eingeben..." aria-describedby="Antwort 4">
+                      <input type="text" class="form-control" placeholder="Bitte Text hier eingeben..." aria-describedby="Antwort 4" name="answer4">
                     </div>
                   </div>
 
