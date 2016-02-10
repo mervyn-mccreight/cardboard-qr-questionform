@@ -41,11 +41,10 @@
             <div class="panel-body">
               <form role="form" action="process.php" method="post">
 
-                <!-- TODO: The ID should probably not be changeable by the end user -->
-                <div class="form-group">
+                <div class="form-group hidden">
                   <div class="input-group">
                     <span class="input-group-addon" id="question-id">ID</span>
-                    <input type="text" class="form-control" placeholder="ID der Frage" aria-describedby="ID" name="questionId">
+                    <input type="text" class="form-control" aria-describedby="ID" name="questionId" value="-1">
                   </div>
                 </div>
 
