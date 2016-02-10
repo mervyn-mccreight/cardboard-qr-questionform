@@ -38,6 +38,8 @@
     }
   }
 
+  // TODO: generate corresponding coin (+JSON file)
+
   // create question from POST data
   $submittedQuestion = new Question(
                             $_POST["questionId"],
