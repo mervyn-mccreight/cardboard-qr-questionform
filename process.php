@@ -32,7 +32,13 @@
     public function getId() {
       return $this->id;
     }
+
+    public function setId($id) {
+      $this->id = $id;
+    }
   }
+
+  // TODO: generate corresponding coin (+JSON file)
 
   // create question from POST data
   $submittedQuestion = new Question(
@@ -45,55 +51,33 @@
                             $_POST["correct-answer"] - 1
                           );
 
+  // TODO: move saving to file into question class
+
   // new list of questions
   $newQuestions = array();
   $found = false;
 
   // open questions file
-  $fileName = "questions.json";
-  $dataFile = fopen($fileName, "r+");
-
-  // if file existed before
-  if (filesize($fileName) > 0) {
-    // read all file contents
-    $fileContents = fread($dataFile, filesize($fileName));
-
-    // create array of stdClass objects from contents
-    $stdQuestions = json_decode($fileContents);
-
-    // convert array elements into Question objects
-    // also insert/overwrite with the submitted question
-    foreach ($stdQuestions as $stdQuestion) {
-      $question = Question::fromStdObj($stdQuestion);
-
-      if ($question->getId() == $submittedQuestion->getId()) {
-        array_push($newQuestions, $submittedQuestion);
-        $found = true;
-      } else {
-        array_push($newQuestions, $question);
-      }
-    }
+  if (!file_exists('questions/')) {
+      mkdir('questions/', 0777, true);
   }
 
-  // insert submitted question if it has not been used to replace a previous question
-  if (!$found) {
-    array_push($newQuestions, $submittedQuestion);
+  $fi = new FilesystemIterator("questions/", FilesystemIterator::SKIP_DOTS);
+  if ($submittedQuestion->getId() == -1) {
+    $submittedQuestion->setId(iterator_count($fi));
   }
-
-  // close read-access file
-  fclose($dataFile);
+  $fileName = "questions/question_" . $submittedQuestion->getId() . ".json";
 
   // overwrite file with write access
-  // (ftruncate to clear the existing file lead to errors :-/)
   $dataFile = fopen($fileName, "w");
 
   // write new questions
-  fwrite($dataFile, json_encode($newQuestions));
+  fwrite($dataFile, $submittedQuestion->toJson());
 
   // close file
   fclose($dataFile);
 
   // redirect back to previous page
-  // (Better: redirect to question overview, once that exists)
+  // TODO: (Better: redirect to question overview, once that exists)
   header('Location: ' . $_SERVER['HTTP_REFERER']);
 ?>

@@ -31,8 +31,6 @@
 
     <!-- content  -->
     <div class="container">
-      <div class="row">
-        <div class="col-md-8">
           <div class="panel panel-default">
             <div class="panel-heading">
               Frage
@@ -41,11 +39,10 @@
             <div class="panel-body">
               <form role="form" action="process.php" method="post">
 
-                <!-- TODO: The ID should probably not be changeable by the end user -->
-                <div class="form-group">
+                <div class="form-group hidden">
                   <div class="input-group">
                     <span class="input-group-addon" id="question-id">ID</span>
-                    <input type="text" class="form-control" placeholder="ID der Frage" aria-describedby="ID" name="questionId">
+                    <input type="text" class="form-control" aria-describedby="ID" name="questionId" value="-1">
                   </div>
                 </div>
 
@@ -113,22 +110,6 @@
               </form>
             </div>
           </div>
-        </div>
-
-        <!-- qr code vorschau -->
-        <div class="col-md-4">
-          <div class="thumbnail">
-            <h4 class="text-center">QR Code Preview:</h4>
-            <img data-src="holder.js/180x180" class="img-responsive thumbnail" data-holder-rendered="true">
-            <div class="caption text-center">
-              <a href="#" class="btn btn-primary" role="button">Refresh</a>
-            </div>
-          </div>
-
-
-
-        </div>
-      </div>
     </div>
 
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
