@@ -34,7 +34,7 @@
 
     <!-- content  -->
     <div class="container">
-      <table id="question-table">
+      <table id="question-table" data-toggle="modal" href="#question-modal">
         <thead>
           <tr>
             <th data-field="id">ID</th>
@@ -44,6 +44,95 @@
           </tr>
         </thead>
       </table>
+
+      <hr>
+
+      <button onclick="overview.clearModal()" class="btn btn-info" data-toggle="modal" href="#question-modal">Neue Frage anlegen</button>
+    </div>
+
+    <!-- modal definition -->
+    <div class="modal fade" id="question-modal" tabindex="-1">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="myModalLabel">Frage</h4>
+          </div>
+
+          <div class="modal-body">
+            <form role="form" action="process.php" method="post">
+              <div class="form-group hidden">
+                <div class="input-group">
+                  <span class="input-group-addon" id="question-id">ID</span>
+                  <input type="text" class="form-control" aria-describedby="ID" name="questionId" value="-1">
+                </div>
+              </div>
+
+              <div class="form-group">
+                <div class="page-header text-center">
+                  <h4>Fragetext</h4>
+                </div>
+                <textarea class="form-control" rows="5" id="question-content" name="question"></textarea>
+              </div>
+
+                <div class="page-header text-center">
+                  <h4>Antwortmöglichkeiten</h4>
+                </div>
+
+                <div class="form-group">
+                  <div class="input-group">
+                    <span class="input-group-addon" id="answer-1">Antwort 1</span>
+                    <input type="text" class="form-control" placeholder="Bitte Text hier eingeben..." aria-describedby="Antwort 1" name="answer1">
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <div class="input-group">
+                    <span class="input-group-addon" id="answer-2">Antwort 2</span>
+                    <input type="text" class="form-control" placeholder="Bitte Text hier eingeben..." aria-describedby="Antwort 2" name="answer2">
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <div class="input-group">
+                    <span class="input-group-addon" id="answer-3">Antwort 3</span>
+                    <input type="text" class="form-control" placeholder="Bitte Text hier eingeben..." aria-describedby="Antwort 3" name="answer3">
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <div class="input-group">
+                    <span class="input-group-addon" id="answer-4">Antwort 4</span>
+                    <input type="text" class="form-control" placeholder="Bitte Text hier eingeben..." aria-describedby="Antwort 4" name="answer4">
+                  </div>
+                </div>
+
+
+                  <div class="page-header text-center">
+                    <h4>Auswahl der korrekten Antwort</h4>
+                  </div>
+                  <div class="text-center">
+                    <div class="btn-group" data-toggle="buttons">
+                      <label class="btn btn-default">
+                          <input type="radio" name="correct-answer" value="1" /> 1
+                      </label>
+                      <label class="btn btn-default">
+                          <input type="radio" name="correct-answer" value="2" /> 2
+                      </label>
+                      <label class="btn btn-default">
+                          <input type="radio"  name="correct-answer" value="3" /> 3
+                      </label>
+                      <label class="btn btn-default">
+                          <input type="radio" name="correct-answer" value="4" /> 4
+                      </label>
+                    </div>
+                  </div>
+
+              <button type="submit" class="btn btn-info">Save Changes</button>
+            </form>
+          </div>
+        </div>
+      </div>
     </div>
 
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
