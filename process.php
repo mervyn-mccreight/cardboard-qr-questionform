@@ -1,6 +1,21 @@
 <?php
-  class Question implements JsonSerializable {
-    private $id;
+  abstract class Data implements JsonSerializable {
+    protected $id;
+
+    abstract public function jsonSerialize();
+
+    abstract public function toJson();
+
+    public function getId() {
+      return $this->id;
+    }
+
+    public function setId($id) {
+      $this->id = $id;
+    }
+  }
+
+  class Question extends Data {
     private $question;
     private $answers;
     private $correctAnswer;
@@ -18,23 +33,6 @@
 
     public function toJson() {
       return json_encode($this);
-    }
-
-    public static function fromJson($json) {
-      $stdObj = json_decode($json);
-      return fromStdObj($stdObj);
-    }
-
-    public static function fromStdObj($stdObj) {
-      return new Question($stdObj->id, $stdObj->question, $stdObj->answers, $stdObj->correctAnswer);
-    }
-
-    public function getId() {
-      return $this->id;
-    }
-
-    public function setId($id) {
-      $this->id = $id;
     }
   }
 
