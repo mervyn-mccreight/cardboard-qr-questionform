@@ -13,6 +13,8 @@
     $('input[type=radio][value=2]').parent().removeClass('active');
     $('input[type=radio][value=3]').parent().removeClass('active');
     $('input[type=radio][value=4]').parent().removeClass('active');
+
+    $('#qr-preview').addClass('hidden');
   };
 
   overview.updateTable = function(jsonString) {
@@ -22,6 +24,8 @@
       data: data
     }).on('click-row.bs.table', function (e, row, $element) {
       overview.clearModal();
+
+      $('#qr-preview').removeClass('hidden');
 
       $('input[name=questionId]').attr('value', row.id);
       $('#question-content').val(row.question);
@@ -35,6 +39,17 @@
 
       $('input[type=radio][value=' + correctAnswer +"]").parent().addClass('active');
       $('input[type=radio][value=' + correctAnswer +"]").attr('checked', '');
+
+      $.get(
+          "api.php?action=get_qrcodes",
+          {id : row.id, dimension : 200},
+          function(data) {
+              var qrCodes = JSON.parse(data);
+              console.log(data);
+              $('#question-qr').attr('src', qrCodes.question);
+              $('#coin-qr').attr('src', qrCodes.coin);
+          }
+      );
     });
   };
 
