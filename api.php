@@ -59,9 +59,12 @@
     return $qrCodes->toJson();
   }
 
+  function get_question_count() {
+    $iterator = new FilesystemIterator("questions/", FilesystemIterator::SKIP_DOTS);
+    return "".iterator_count($iterator);
+  }
 
-
-  $possible_url = array("get_questions", "get_qrcodes");
+  $possible_url = array("get_questions", "get_qrcodes", "get_question_count");
 
   $value = "An error has occurred";
 
@@ -77,6 +80,9 @@
             $value = get_qrcodes_by_id($_GET["id"], $_GET["dimension"]);
           else
             $value = "ERROR";
+          break;
+        case "get_question_count":
+          $value = get_question_count();
           break;
       }
   }
