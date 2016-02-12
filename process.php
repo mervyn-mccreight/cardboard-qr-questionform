@@ -18,7 +18,6 @@
   $coin->saveToFile();
 
   // redirect back to previous page
-  // TODO: (Better: redirect to question overview, once that exists)
   header('Location: ' . $_SERVER['HTTP_REFERER']);
 
   // TODO:

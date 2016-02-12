@@ -147,7 +147,7 @@
 
     <script>
       $.get(
-          "getQuestions.php",
+          "api.php?action=get_questions",
           {},
           function(data) {
               overview.updateTable(data);
