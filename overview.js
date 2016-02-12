@@ -34,7 +34,7 @@
       var correctAnswer = row.correctAnswer+1;
 
       $('input[type=radio][value=' + correctAnswer +"]").parent().addClass('active');
-      console.log(row);
+      $('input[type=radio][value=' + correctAnswer +"]").attr('checked', '');
     });
   };
 

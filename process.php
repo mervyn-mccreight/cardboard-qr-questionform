@@ -30,7 +30,7 @@
       }
 
       $fi = new FilesystemIterator($this->getPath(), FilesystemIterator::SKIP_DOTS);
-      if ($this->getId() == -1) {
+      if ($this->getId() == "") {
         $this->setId(iterator_count($fi));
       }
       $fileName = $this->getPath() . $this->getId() . ".json";

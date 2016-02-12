@@ -146,26 +146,13 @@
     <script src="overview.js"></script>
 
     <script>
-      var data = [{
-        "question": "asda",
-        "answers": ["asdas", "asd", "asd", "gfdags"],
-        "correctAnswer": 0,
-        "id": 0,
-        "type": 1
-      }, {
-        "question": "asda",
-        "answers": ["asdas", "asd", "asd", "gfdags"],
-        "correctAnswer": 0,
-        "id": 1,
-        "type": 1
-      }, {
-        "question": "asda",
-        "answers": ["asdas", "asd", "asd", "gfdags"],
-        "correctAnswer": 0,
-        "id": 2,
-        "type": 1
-      }];
-      overview.updateTable(JSON.stringify(data));
+      $.get(
+          "getQuestions.php",
+          {},
+          function(data) {
+              overview.updateTable(data);
+          }
+      );
     </script>
   </body>
 </html>
