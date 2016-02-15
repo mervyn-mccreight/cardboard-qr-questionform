@@ -69,30 +69,8 @@
     $coinFilename = "coins/".$id.".json";
     unlink($questionFilename);
     unlink($coinFilename);
-    return "deletedlolwhat: " . $id;
+    return "";
   }
-
-  $possible_url = array("get_questions", "get_qrcodes", "get_question_count", "remove_by_id");
-  $value = "An error has occurred";
-  //
-  // if (isset($_GET["action"]) && in_array($_GET["action"], $possible_url))
-  // {
-  //   switch ($_GET["action"])
-  //     {
-  //       case "get_questions":
-  //         $value = get_questions();
-  //         break;
-  //       case "get_qrcodes":
-  //         if (isset($_GET["id"]) && isset($_GET["dimension"]))
-  //           $value = get_qrcodes_by_id($_GET["id"], $_GET["dimension"]);
-  //         else
-  //           $value = "ERROR";
-  //         break;
-  //       case "get_question_count":
-  //         $value = get_question_count();
-  //         break;
-  //     }
-  // }
 
   function handle_error($message) {
     exit($message);
@@ -108,6 +86,8 @@
           exit(get_questions());
         case 'qrcodes':
           exit(get_qrcodes_by_id($request[1], 200));
+        case 'qrcodesprint':
+          exit(get_qrcodes_by_id($request[1], 400));
         case 'questioncount':
           exit(get_question_count());
         default:
