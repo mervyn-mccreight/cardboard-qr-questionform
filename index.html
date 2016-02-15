@@ -148,6 +148,7 @@
                   </div>
 
               <button type="submit" class="btn btn-info">Save Changes</button>
+              <button type="button" id="delete-button" onclick="overview.sendDeleteRequest()" class="btn btn-danger">Delete</button>
             </form>
           </div>
         </div>
@@ -166,7 +167,7 @@
 
     <script>
       $.get(
-          "api.php?action=get_questions",
+          "api.php/questions",
           {},
           function(data) {
               overview.updateTable(data);

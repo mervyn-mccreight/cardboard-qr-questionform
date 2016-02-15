@@ -64,28 +64,66 @@
     return "".iterator_count($iterator);
   }
 
-  $possible_url = array("get_questions", "get_qrcodes", "get_question_count");
-
-  $value = "An error has occurred";
-
-  if (isset($_GET["action"]) && in_array($_GET["action"], $possible_url))
-  {
-    switch ($_GET["action"])
-      {
-        case "get_questions":
-          $value = get_questions();
-          break;
-        case "get_qrcodes":
-          if (isset($_GET["id"]) && isset($_GET["dimension"]))
-            $value = get_qrcodes_by_id($_GET["id"], $_GET["dimension"]);
-          else
-            $value = "ERROR";
-          break;
-        case "get_question_count":
-          $value = get_question_count();
-          break;
-      }
+  function delete_question($id) {
+    $questionFilename = "questions/".$id.".json";
+    $coinFilename = "coins/".$id.".json";
+    unlink($questionFilename);
+    unlink($coinFilename);
+    return "deletedlolwhat: " . $id;
   }
 
-  exit($value);
+  $possible_url = array("get_questions", "get_qrcodes", "get_question_count", "remove_by_id");
+  $value = "An error has occurred";
+  //
+  // if (isset($_GET["action"]) && in_array($_GET["action"], $possible_url))
+  // {
+  //   switch ($_GET["action"])
+  //     {
+  //       case "get_questions":
+  //         $value = get_questions();
+  //         break;
+  //       case "get_qrcodes":
+  //         if (isset($_GET["id"]) && isset($_GET["dimension"]))
+  //           $value = get_qrcodes_by_id($_GET["id"], $_GET["dimension"]);
+  //         else
+  //           $value = "ERROR";
+  //         break;
+  //       case "get_question_count":
+  //         $value = get_question_count();
+  //         break;
+  //     }
+  // }
+
+  function handle_error($message) {
+    exit($message);
+  }
+
+  $method = $_SERVER['REQUEST_METHOD'];
+  $request = explode("/", substr(@$_SERVER['PATH_INFO'], 1));
+
+  switch ($method) {
+    case 'GET':
+      switch ($request[0]) {
+        case 'questions':
+          exit(get_questions());
+        case 'qrcodes':
+          exit(get_qrcodes_by_id($request[1], 200));
+        case 'questioncount':
+          exit(get_question_count());
+        default:
+          handle_error('unknown get-call: ' . $request[0]);
+      }
+      break;
+    case 'DELETE':
+      switch ($request[0]) {
+        case 'questions':
+          exit(delete_question($request[1]));
+        default:
+          handle_error('unknown delete-call: ' . $request[0]);
+      }
+      break;
+    default:
+      handle_error('something went very wrong bro.');
+      break;
+  }
 ?>

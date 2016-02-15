@@ -15,7 +15,21 @@
     $('input[type=radio][value=4]').parent().removeClass('active');
 
     $('#qr-preview').addClass('hidden');
+    $('#delete-button').addClass('hidden');
   };
+
+  overview.sendDeleteRequest = function() {
+    var id = $('input[name=questionId]').val();
+
+    $.ajax({
+      url: 'api.php/questions/' + id,
+      type: 'DELETE',
+      success: function(result) {
+          console.log(result);
+          location.reload(true);
+      }
+    });
+  }
 
   overview.updateTable = function(jsonString) {
     var data = JSON.parse(jsonString);
@@ -41,8 +55,8 @@
       $('input[type=radio][value=' + correctAnswer +"]").attr('checked', '');
 
       $.get(
-          "api.php?action=get_qrcodes",
-          {id : row.id, dimension : 200},
+          "api.php/qrcodes/" + row.id,
+          {},
           function(data) {
               var qrCodes = JSON.parse(data);
               console.log(data);
@@ -50,6 +64,9 @@
               $('#coin-qr').attr('src', qrCodes.coin);
           }
       );
+
+      $('#delete-button').removeClass('hidden');
+
     });
   };
 
