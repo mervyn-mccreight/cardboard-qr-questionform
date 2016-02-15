@@ -16,6 +16,17 @@
 
     $('#qr-preview').addClass('hidden');
     $('#delete-button').addClass('hidden');
+    $('#print-button').addClass('hidden');
+  };
+
+  overview.print = function() {
+    var prtContent = document.getElementById("print-page");
+    var WinPrint = window.open('', '', 'left=0,top=0,toolbar=0,scrollbars=0,status=0');
+    WinPrint.document.write(prtContent.innerHTML);
+    WinPrint.document.close();
+    WinPrint.focus();
+    WinPrint.print();
+    WinPrint.close();
   };
 
   overview.sendDeleteRequest = function() {
@@ -29,7 +40,7 @@
           location.reload(true);
       }
     });
-  }
+  };
 
   overview.updateTable = function(jsonString) {
     var data = JSON.parse(jsonString);
@@ -65,7 +76,21 @@
           }
       );
 
+      $.get(
+          "api.php/qrcodesprint/" + row.id,
+          {},
+          function(data) {
+              var qrCodes = JSON.parse(data);
+              console.log(data);
+              $('#print-question-qr').attr('src', qrCodes.question);
+              $('#print-coin-qr').attr('src', qrCodes.coin);
+          }
+      );
+
+      $('#print-title').html("Frage: " + row.question);
+
       $('#delete-button').removeClass('hidden');
+      $('#print-button').removeClass('hidden');
 
     });
   };
