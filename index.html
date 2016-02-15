@@ -147,11 +147,28 @@
                     </div>
                   </div>
 
+              <hr>
+
               <button type="submit" class="btn btn-info">Save Changes</button>
               <button type="button" id="delete-button" onclick="overview.sendDeleteRequest()" class="btn btn-danger">Delete</button>
+              <button type="button" id="print-button" onclick="overview.print()" class="btn btn-default">Print</button>
             </form>
           </div>
         </div>
+      </div>
+    </div>
+
+    <div class="hidden" id="print-page">
+
+      <div class="dont-break">
+        <h3 id="print-title"></h3>
+        <img id="print-question-qr" style="outline-color:black; outline-style: solid;">
+      </div>
+
+      <br/>
+
+      <div class="dont-break">
+        <img id="print-coin-qr" style="outline-color:black; outline-style: solid;">
       </div>
     </div>
 
