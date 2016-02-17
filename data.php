@@ -6,7 +6,6 @@
   }
 
   function get_new_id() {
-
     if (!file_exists("questions/")) {
       return 0;
     }
@@ -55,10 +54,10 @@
           mkdir($this->getPath(), 0777, true);
       }
 
-      $fi = new FilesystemIterator($this->getPath(), FilesystemIterator::SKIP_DOTS);
-      if ($this->getId() == "") {
+      if ($this->getId() === "") {
         $this->setId(get_new_id());
       }
+
       $fileName = $this->getPath() . $this->getId() . ".json";
 
       // overwrite file with write access
