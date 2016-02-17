@@ -140,6 +140,12 @@
             exit(get_question_by_id($request[1]));
           }
 
+          if ($requestSize == 3) {
+            if ($request[2] == "") {
+              exit(get_question_by_id($request[1]));
+            }
+          }
+
           handle_error();
         case 'qrcodes':
           exit(get_qrcodes_by_id($request[1], 200));
