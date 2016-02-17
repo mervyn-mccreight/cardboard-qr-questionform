@@ -1,5 +1,7 @@
 <?php
 
+  require_once("data.php");
+
   function get_questions()
   {
 
@@ -49,13 +51,11 @@
       return "";
     }
 
-    $file = fopen($questionFilename, "r");
-    $questionContent = fread($file, filesize($questionFilename));
-    fclose($file);
+    $questionShortObject = (object) ['id' => $id, 'type' => DataType::QUESTION];
 
     $questionUrl = "https://chart.googleapis.com/chart?cht=qr&choe=UTF-8"
           ."&chs=".$dimension."x".$dimension
-          ."&chl=".urlencode($questionContent);
+          ."&chl=".urlencode(json_encode($questionShortObject));
 
     $coinFilename = "coins/".$id.".json";
 
