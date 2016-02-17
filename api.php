@@ -2,6 +2,11 @@
 
   function get_questions()
   {
+
+    if (!file_exists("questions/")) {
+      return "[]";
+    }
+
     $questions = array();
 
     $iterator = new FilesystemIterator("questions/", FilesystemIterator::SKIP_DOTS);
@@ -67,8 +72,15 @@
   function delete_question($id) {
     $questionFilename = "questions/".$id.".json";
     $coinFilename = "coins/".$id.".json";
-    unlink($questionFilename);
-    unlink($coinFilename);
+
+    if (file_exists($questionFilename)) {
+      unlink($questionFilename);
+    }
+
+    if (file_exists($coinFilename)) {
+      unlink($coinFilename);
+    }
+
     return "";
   }
 
@@ -102,6 +114,11 @@
           }
 
           if ($requestSize == 2) {
+            if ($request[1] == "") {
+              // special case.
+              // http://localhost/cardboard-qr-marker-frontend/api.php/questions/
+              exit(get_questions());
+            }
             exit(get_question_by_id($request[1]));
           }
 
