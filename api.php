@@ -72,18 +72,40 @@
     return "";
   }
 
+  function get_question_by_id($id) {
+    $filePath = "questions/".$id.".json";
+
+    if (file_exists($filePath)) {
+      $file = fopen($filePath, "r");
+      $content = fread($file, filesize($filePath));
+      fclose($file);
+      return $content;
+    }
+
+    return "no question with id: " . $id;
+  }
+
   function handle_error($message) {
     exit($message);
   }
 
   $method = $_SERVER['REQUEST_METHOD'];
   $request = explode("/", substr(@$_SERVER['PATH_INFO'], 1));
+  $requestSize = sizeof($request);
 
   switch ($method) {
     case 'GET':
       switch ($request[0]) {
         case 'questions':
-          exit(get_questions());
+          if ($requestSize == 1) {
+            exit(get_questions());
+          }
+
+          if ($requestSize == 2) {
+            exit(get_question_by_id($request[1]));
+          }
+
+          handle_error("too many arguments in questions call");
         case 'qrcodes':
           exit(get_qrcodes_by_id($request[1], 200));
         case 'qrcodesprint':
