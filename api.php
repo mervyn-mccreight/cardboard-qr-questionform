@@ -43,6 +43,12 @@
 
   function get_qrcodes_by_id($id, $dimension) {
     $questionFilename = "questions/".$id.".json";
+
+    if (!file_exists($questionFilename)) {
+      http_response_code(404);
+      return "";
+    }
+
     $file = fopen($questionFilename, "r");
     $questionContent = fread($file, filesize($questionFilename));
     fclose($file);
@@ -52,6 +58,12 @@
           ."&chl=".urlencode($questionContent);
 
     $coinFilename = "coins/".$id.".json";
+
+    if (!file_exists($coinFilename)) {
+      http_response_code(404);
+      return "";
+    }
+
     $file = fopen($coinFilename, "r");
     $coinContent = fread($file, filesize($coinFilename));
     fclose($file);
@@ -65,6 +77,10 @@
   }
 
   function get_question_count() {
+    if (!file_exists("questions/")) {
+      return "0";
+    }
+
     $iterator = new FilesystemIterator("questions/", FilesystemIterator::SKIP_DOTS);
     return "".iterator_count($iterator);
   }
@@ -94,11 +110,13 @@
       return $content;
     }
 
-    return "no question with id: " . $id;
+    http_response_code(404);
+    return "";
   }
 
-  function handle_error($message) {
-    exit($message);
+  function handle_error() {
+    http_response_code(400);
+    exit("");
   }
 
   $method = $_SERVER['REQUEST_METHOD'];
@@ -122,7 +140,7 @@
             exit(get_question_by_id($request[1]));
           }
 
-          handle_error("too many arguments in questions call");
+          handle_error();
         case 'qrcodes':
           exit(get_qrcodes_by_id($request[1], 200));
         case 'qrcodesprint':
@@ -130,7 +148,7 @@
         case 'questioncount':
           exit(get_question_count());
         default:
-          handle_error('unknown get-call: ' . $request[0]);
+          handle_error();
       }
       break;
     case 'DELETE':
@@ -138,11 +156,11 @@
         case 'questions':
           exit(delete_question($request[1]));
         default:
-          handle_error('unknown delete-call: ' . $request[0]);
+          handle_error();
       }
       break;
     default:
-      handle_error('something went very wrong bro.');
+      handle_error();
       break;
   }
 ?>
