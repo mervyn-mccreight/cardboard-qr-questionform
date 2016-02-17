@@ -5,6 +5,32 @@
       const QUESTION = 1;
   }
 
+  function get_new_id() {
+
+    if (!file_exists("questions/")) {
+      return 0;
+    }
+
+    $files = array();
+    $iterator = new FilesystemIterator("questions/", FilesystemIterator::SKIP_DOTS);
+
+    while($iterator->valid()) {
+      array_push($files, $iterator->getFileName());
+      $iterator->next();
+    }
+
+    if (sizeof($files) == 0) {
+      return 0;
+    }
+
+    natsort($files);
+
+    $lastFile = end($files);
+    $name = explode(".", $lastFile);
+
+    return intval($name[0]) + 1;
+  }
+
   abstract class Data implements JsonSerializable {
     protected $id;
     protected $type;
@@ -31,7 +57,7 @@
 
       $fi = new FilesystemIterator($this->getPath(), FilesystemIterator::SKIP_DOTS);
       if ($this->getId() == "") {
-        $this->setId(iterator_count($fi));
+        $this->setId(get_new_id());
       }
       $fileName = $this->getPath() . $this->getId() . ".json";
 
