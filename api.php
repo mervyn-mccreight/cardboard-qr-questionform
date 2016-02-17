@@ -6,7 +6,7 @@
   {
 
     if (!file_exists("questions/")) {
-      return "[]";
+      return '{"questions": []}';
     }
 
     $questions = array();
@@ -22,7 +22,7 @@
       $iterator->next();
     }
 
-    return "[" . implode(",", $questions) . "]";
+    return '{"questions":' . "[" . implode(",", $questions) . "]" . "}";
   }
 
   class QRCodeUrls implements JsonSerializable {

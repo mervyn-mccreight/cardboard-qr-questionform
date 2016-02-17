@@ -43,10 +43,10 @@
   };
 
   overview.updateTable = function(jsonString) {
-    var data = JSON.parse(jsonString);
+    var tableData = JSON.parse(jsonString);
 
     $('#question-table').bootstrapTable({
-      data: data
+      data: tableData.questions
     }).on('click-row.bs.table', function (e, row, $element) {
       overview.clearModal();
 
