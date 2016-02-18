@@ -93,6 +93,10 @@
       $('#print-button').removeClass('hidden');
 
     });
+
+    $('#question-table > tbody > tr').attr('data-toggle', 'modal');
+    $('#question-table > tbody > tr').attr('href', '#question-modal');
+    // data-toggle="modal" href="#question-modal"
   };
 
   overview.showModal = function() {
