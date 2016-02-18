@@ -96,6 +96,7 @@
 
     $('#question-table > tbody > tr').attr('data-toggle', 'modal');
     $('#question-table > tbody > tr').attr('href', '#question-modal');
+    $('#question-table > tbody > tr').attr('style', 'cursor: pointer');
     // data-toggle="modal" href="#question-modal"
   };
 
