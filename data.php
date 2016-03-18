@@ -1,10 +1,22 @@
 <?php
+  /**
+    * Enumeration-Class to describe the type of the data.
+    */
   abstract class DataType
   {
       const COIN  = 0;
       const QUESTION = 1;
   }
 
+  /**
+   * Get the next available question id on the file-system.
+   *
+   * The id-range is [0 - MAX_INT].
+   * This function does not fill id-gaps, it looks for the highest existing id
+   * and takes the next.
+   *
+   * @return int - the next available id.
+   */
   function get_new_id() {
     if (!file_exists("questions/")) {
       return 0;
@@ -30,6 +42,11 @@
     return intval($name[0]) + 1;
   }
 
+  /**
+   * Abstract class to hold abstract data information.
+   *
+   * It implements the JsonSerializable-interface.
+   */
   abstract class Data implements JsonSerializable {
     protected $id;
     protected $type;
@@ -46,8 +63,24 @@
       $this->id = $id;
     }
 
+    /**
+     * Returns the directory-path, in which the files of this data-type will be stored.
+     *
+     * @return string - The directory-path.
+     */
     protected abstract function getPath();
 
+    /**
+     * Saves the data-object to a file.
+     *
+     * The content of the file will be the JSON, describing the content of the
+     * data-object. The filename will be <id>.json.
+     *
+     * For this function to work, php needs to have write-access on the
+     * servers file-system folder.
+     *
+     * @return void
+     */
     public function saveToFile() {
       // open questions file
       if (!file_exists($this->getPath())) {
@@ -71,11 +104,24 @@
     }
   }
 
+  /**
+   * Concrete question-data class.
+   */
   class Question extends Data {
     private $question;
     private $answers;
     private $correctAnswer;
 
+    /**
+     * Constructor for the question class.
+     *
+     * @param int         $id             The question id.
+     * @param string      $question       The question-text.
+     * @param [string]    $answers        An array of possible multiple-choice answers.
+     * @param int         $correctAnswer  The index of the correct answer in the answers-array.
+     *
+     * @return Question
+     */
     public function __construct($id, $question, $answers, $correctAnswer) {
       $this->id = $id;
       $this->question = $question;
@@ -97,7 +143,22 @@
     }
   }
 
+  /**
+   * Concrete coin-data class.
+   */
   class Coin extends Data {
+
+    /**
+     * Constructor for the coin class.
+     *
+     * The coin-id is logically linked to the question-id.
+     * The question with the equivalent id "unlocks" the respective coin in the
+     * FH Wedel QR-Schnitzeljagd application.
+     *
+     * @param int         $id             The coin id.
+     *
+     * @return Coin
+     */
     public function __construct($id) {
       $this->id = $id;
       $this->type = DataType::COIN;
