@@ -1,10 +1,18 @@
 <?php
-
+  // Import the data-model.
   require_once("data.php");
 
-  function get_questions()
-  {
-
+  /**
+   * Function to handle the "/questions/" REST-GET call to get all questions.
+   *
+   * It looks for all existing questions on the file-system and
+   * returns them all in JSON-format.
+   * The JSON will be an JSON-object, containing an JSON-object "questions",
+   * which contains an array of all questions in JSON.
+   *
+   * @return string - The JSON answer.
+   */
+  function get_questions() {
     if (!file_exists("questions/")) {
       return '{"questions": []}';
     }
@@ -25,10 +33,23 @@
     return '{"questions":' . "[" . implode(",", $questions) . "]" . "}";
   }
 
+  /**
+   * Class to hold google-api qr-code urls for a pair (question, coin).
+   *
+   * It implements the JsonSerializable-interface.
+   */
   class QRCodeUrls implements JsonSerializable {
     private $question;
     private $coin;
 
+    /**
+     * Constructor.
+     *
+     * @param string      $questionUrl       The question qr-code url.
+     * @param string      $coinUrl           The coin qr-code url.
+     *
+     * @return QRCodeUrls
+     */
     public function __construct($questionUrl, $coinUrl) {
       $this->question = $questionUrl;
       $this->coin = $coinUrl;
@@ -43,6 +64,19 @@
     }
   }
 
+  /**
+   * Function to handle the "/qrcodes/<id>" and "/qrcodesprint/<id>" REST-GET calls.
+   *
+   * It returns a JSON-string in which the google-api qr-code urls for both
+   *  - the question
+   *  - the coin
+   * are contained in fields with respective names.
+   *
+   * @param int         $id             The question id.
+   * @param int         $dimension      The wanted qr-code dimension.
+   *
+   * @return string - The answer JSON-string.
+   */
   function get_qrcodes_by_id($id, $dimension) {
     $questionFilename = "questions/".$id.".json";
 
@@ -76,6 +110,14 @@
     return $qrCodes->toJson();
   }
 
+  /**
+   * Function to handle the "/questioncount" REST-GET call.
+   *
+   * It returns the count of currently existing questions as an string,
+   * representing the integer value of the sum.
+   *
+   * @return string - The sum of questions.
+   */
   function get_question_count() {
     if (!file_exists("questions/")) {
       return "0";
@@ -85,6 +127,16 @@
     return "".iterator_count($iterator);
   }
 
+  /**
+   * Function to handle the "/questions/<id>" REST-DELETE call.
+   * It deletes the question with the given id, if existing.
+   * The same for the respective coin.
+   * Otherwise nothing happens.
+   *
+   * @param int         $id             The question id.
+   *
+   * @return string - an empty string.
+   */
   function delete_question($id) {
     $questionFilename = "questions/".$id.".json";
     $coinFilename = "coins/".$id.".json";
@@ -100,6 +152,15 @@
     return "";
   }
 
+  /**
+   * Function to handle the "/questions/<id>" REST-GET call.
+   * It returns the questions json, if a question with the given id exists.
+   * Otherwise it returns an empty 404 HttpMessage.
+   *
+   * @param int         $id             The question id.
+   *
+   * @return string - The JSON-string for the question.
+   */
   function get_question_by_id($id) {
     $filePath = "questions/".$id.".json";
 
@@ -114,6 +175,12 @@
     return "";
   }
 
+  /**
+   * Function to handle an error.
+   * It simply returns an empty 400 HttpMessage.
+   *
+   * @return void
+   */
   function handle_error() {
     http_response_code(400);
     exit("");
