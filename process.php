@@ -1,4 +1,5 @@
 <?php
+  // import the data-model.
   require_once('data.php');
 
   // create question from POST data
@@ -19,7 +20,4 @@
 
   // redirect back to previous page
   header('Location: ' . $_SERVER['HTTP_REFERER']);
-
-  // TODO:
-  // sample qr code URL: https://chart.googleapis.com/chart?chs=500x500&cht=qr&chl={%22question%22:%22asda%22,%22answers%22:[%22asdas%22,%22asd%22,%22asd%22,%22gfdags%22],%22correctAnswer%22:0,%22id%22:0,%22type%22:1}&choe=UTF-8
 ?>
