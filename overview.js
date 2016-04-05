@@ -79,53 +79,6 @@
 
       // TODO: delete particle shitstem
       // TODO: print page
-
-
-      // TODO: onRowClick Events.
-      // overview.clearModal();
-      //
-      // $('#qr-preview').removeClass('hidden');
-      //
-      // $('input[name=questionId]').attr('value', row.id);
-      // $('#question-content').val(row.question);
-      //
-      // $('input[name=answer1]').attr('value', row.answers[0]);
-      // $('input[name=answer2]').attr('value', row.answers[1]);
-      // $('input[name=answer3]').attr('value', row.answers[2]);
-      // $('input[name=answer4]').attr('value', row.answers[3]);
-      //
-      // var correctAnswer = row.correctAnswer+1;
-      //
-      // $('input[type=radio][value=' + correctAnswer +"]").parent().addClass('active');
-      // $('input[type=radio][value=' + correctAnswer +"]").attr('checked', '');
-      //
-      // $.get(
-      //     "api.php/qrcodes/" + row.id,
-      //     {},
-      //     function(data) {
-      //         var qrCodes = JSON.parse(data);
-      //         console.log(data);
-      //         $('#question-qr').attr('src', qrCodes.question);
-      //         $('#coin-qr').attr('src', qrCodes.coin);
-      //     }
-      // );
-      //
-      // $.get(
-      //     "api.php/qrcodesprint/" + row.id,
-      //     {},
-      //     function(data) {
-      //         var qrCodes = JSON.parse(data);
-      //         console.log(data);
-      //         $('#print-question-qr').attr('src', qrCodes.question);
-      //         $('#print-coin-qr').attr('src', qrCodes.coin);
-      //     }
-      // );
-      //
-      // $('#print-title').html("Frage: " + row.question);
-      //
-      // $('#delete-button').removeClass('hidden');
-      // $('#print-button').removeClass('hidden');
-
     });
 
     $('#particle-table > tbody > tr').attr('data-toggle', 'modal');
