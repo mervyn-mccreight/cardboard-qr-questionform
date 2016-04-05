@@ -33,6 +33,27 @@
     return '{"questions":' . "[" . implode(",", $questions) . "]" . "}";
   }
 
+  function get_particlesystems() {
+    if (!file_exists("particle/")) {
+      return '{"particleSystems": []}';
+    }
+
+    $particleSystems = array();
+
+    $iterator = new FilesystemIterator("particle/", FilesystemIterator::SKIP_DOTS);
+    while($iterator->valid()) {
+
+      $file = fopen($iterator->getPathname(), "r");
+      $content = fread($file, filesize($iterator->getPathname()));
+      fclose($file);
+      array_push($particleSystems, $content);
+
+      $iterator->next();
+    }
+
+    return '{"particleSystems":' . "[" . implode(",", $particleSystems) . "]" . "}";
+  }
+
   /**
    * Class to hold google-api qr-code urls for a pair (question, coin).
    *
@@ -152,6 +173,19 @@
     return "";
   }
 
+  function save_particle_system() {
+    // create particle system from POST data
+    $submittedParticleSystem = new ParticleSystem(
+                              $_POST["particleSystemId"],
+                              $_POST["startColor"],
+                              $_POST["endColor"]
+                            );
+    $submittedParticleSystem->saveToFile();
+
+    // redirect back to previous page
+    header('Location: ' . $_SERVER['HTTP_REFERER']);
+  }
+
   /**
    * Function to handle the "/questions/<id>" REST-GET call.
    * It returns the questions json, if a question with the given id exists.
@@ -220,6 +254,29 @@
           exit(get_qrcodes_by_id($request[1], 400));
         case 'questioncount':
           exit(get_question_count());
+        case 'particlesystems':
+          if ($requestSize == 1) {
+            exit(get_particlesystems());
+          }
+
+          if ($requestSize == 2) {
+            if ($request[1] == "") {
+              // special case.
+              // http://localhost/cardboard-qr-marker-frontend/api.php/questions/
+              exit(get_particlesystems());
+            }
+            // TODO: by id
+            // exit(get_question_by_id($request[1]));
+          }
+
+          if ($requestSize == 3) {
+            if ($request[2] == "") {
+              // TODO: by id
+              // exit(get_question_by_id($request[1]));
+            }
+          }
+
+          handle_error();
         default:
           handle_error();
       }
@@ -232,8 +289,15 @@
           handle_error();
       }
       break;
+    case 'POST':
+      switch ($request[0]) {
+        case 'particlesystems':
+          save_particle_system();
+          exit("");
+        default:
+          handle_error();
+      }
     default:
       handle_error();
-      break;
   }
 ?>

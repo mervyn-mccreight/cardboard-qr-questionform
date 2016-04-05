@@ -6,40 +6,7 @@
   {
       const COIN  = 0;
       const QUESTION = 1;
-  }
-
-  /**
-   * Get the next available question id on the file-system.
-   *
-   * The id-range is [0 - MAX_INT].
-   * This function does not fill id-gaps, it looks for the highest existing id
-   * and takes the next.
-   *
-   * @return int - the next available id.
-   */
-  function get_new_id() {
-    if (!file_exists("questions/")) {
-      return 0;
-    }
-
-    $files = array();
-    $iterator = new FilesystemIterator("questions/", FilesystemIterator::SKIP_DOTS);
-
-    while($iterator->valid()) {
-      array_push($files, $iterator->getFileName());
-      $iterator->next();
-    }
-
-    if (sizeof($files) == 0) {
-      return 0;
-    }
-
-    natsort($files);
-
-    $lastFile = end($files);
-    $name = explode(".", $lastFile);
-
-    return intval($name[0]) + 1;
+      const PARTICLESYSTEM = 2;
   }
 
   /**
@@ -61,6 +28,40 @@
 
     public function setId($id) {
       $this->id = $id;
+    }
+
+    /**
+     * Get the next available question id on the file-system.
+     *
+     * The id-range is [0 - MAX_INT].
+     * This function does not fill id-gaps, it looks for the highest existing id
+     * and takes the next.
+     *
+     * @return int - the next available id.
+     */
+    protected function get_new_id() {
+      if (!file_exists("questions/")) {
+        return 0;
+      }
+
+      $files = array();
+      $iterator = new FilesystemIterator("questions/", FilesystemIterator::SKIP_DOTS);
+
+      while($iterator->valid()) {
+        array_push($files, $iterator->getFileName());
+        $iterator->next();
+      }
+
+      if (sizeof($files) == 0) {
+        return 0;
+      }
+
+      natsort($files);
+
+      $lastFile = end($files);
+      $name = explode(".", $lastFile);
+
+      return intval($name[0]) + 1;
     }
 
     /**
@@ -88,7 +89,7 @@
       }
 
       if ($this->getId() === "") {
-        $this->setId(get_new_id());
+        $this->setId($this->get_new_id());
       }
 
       $fileName = $this->getPath() . $this->getId() . ".json";
@@ -174,6 +175,55 @@
 
     protected function getPath() {
       return "coins/";
+    }
+  }
+
+  class ParticleSystem extends Data {
+    private $startColor;
+    private $endColor;
+
+    public function __construct($id, $startColor, $endColor) {
+      $this->id = $id;
+      $this->startColor = $startColor;
+      $this->endColor = $endColor;
+      $this->type = DataType::PARTICLESYSTEM;
+    }
+
+    public function jsonSerialize() {
+      return get_object_vars($this);
+    }
+
+    public function toJson() {
+      return json_encode($this);
+    }
+
+    protected function getPath() {
+      return "particle/";
+    }
+
+    protected function get_new_id() {
+      if (!file_exists("particle/")) {
+        return 0;
+      }
+
+      $files = array();
+      $iterator = new FilesystemIterator("particle/", FilesystemIterator::SKIP_DOTS);
+
+      while($iterator->valid()) {
+        array_push($files, $iterator->getFileName());
+        $iterator->next();
+      }
+
+      if (sizeof($files) == 0) {
+        return 0;
+      }
+
+      natsort($files);
+
+      $lastFile = end($files);
+      $name = explode(".", $lastFile);
+
+      return intval($name[0]) + 1;
     }
   }
 ?>
