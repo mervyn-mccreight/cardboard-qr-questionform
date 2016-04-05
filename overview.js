@@ -19,6 +19,17 @@
     $('#print-button').addClass('hidden');
   };
 
+  overview.clearParticleModal = function() {
+    $('input[name=particleSystemId]').removeAttr('value');
+
+    $('#particle-qr-preview').addClass('hidden');
+    $('#particle-delete-button').addClass('hidden');
+    $('#particle-print-button').addClass('hidden');
+
+    $('#start-color-picker').colorpicker('setValue', '#000000');
+    $('#end-color-picker').colorpicker('setValue', '#000000');
+  };
+
   overview.print = function() {
     var prtContent = document.getElementById("print-page");
     var WinPrint = window.open('', '', 'left=0,top=0,toolbar=0,scrollbars=0,status=0');

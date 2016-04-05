@@ -17,6 +17,9 @@
     <!-- theme -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.6/lumen/bootstrap.min.css">
 
+    <!-- bootstrap colorpicker -->
+    <link rel="stylesheet" href="css/bootstrap-colorpicker.min.css">
+
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -71,10 +74,10 @@
 
       <hr>
 
-      <button onclick="" class="btn btn-info" data-toggle="modal" href="#">Neues Partikelsystem</button>
+      <button onclick="overview.clearParticleModal()" class="btn btn-info" data-toggle="modal" href="#particle-modal">Neues Partikelsystem</button>
     </div>
 
-    <!-- modal definition -->
+    <!-- question modal definition -->
     <div class="modal fade" id="question-modal" tabindex="-1">
       <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -182,6 +185,62 @@
       </div>
     </div>
 
+    <!-- particle modal definition -->
+    <div class="modal fade" id="particle-modal" tabindex="-1">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title">Partikelsystem</h4>
+          </div>
+
+          <div class="modal-body">
+            <div class="row" id="particle-qr-preview">
+              <div class="col-md-6">
+                <div class="thumbnail">
+                  <div class="caption text-center">
+                    <h4>Partikelsystem</h4>
+                  </div>
+                  <img class="img img-responsive" id="particle-qr" data-src="holder.js/200x200?auto=yes">
+                </div>
+              </div>
+            </div>
+
+            <form role="form" action="api.php/particlesystems" method="post">
+              <div class="form-group hidden">
+                <div class="input-group">
+                  <span class="input-group-addon" id="particle-id">ID</span>
+                  <input type="text" class="form-control" aria-describedby="ID" name="particleSystemId" value="-1">
+                </div>
+              </div>
+
+                <div class="form-group">
+                  <div class="page-header text-center">
+                    <h4>Attribute</h4>
+                  </div>
+                  <div class="input-group colorpicker-component" id="start-color-picker">
+                    <span class="input-group-addon" style="min-width:3cm;" id="startColor">Startfarbe</span>
+                    <input type="text" class="form-control" value="#000000" aria-describedby="Startfarbe" name="startColor">
+                    <span class="input-group-addon"><i></i></span>
+                  </div>
+
+                  <div class="input-group colorpicker-component" id="end-color-picker">
+                    <span class="input-group-addon" id="startColor" style="min-width:3cm;">Zielfarbe</span>
+                    <input type="text" class="form-control" value="#000000" aria-describedby="Zielfarbe" name="endColor">
+                    <span class="input-group-addon"><i></i></span>
+                  </div>
+                </div>
+              <hr>
+
+              <button type="submit" class="btn btn-info">Save Changes</button>
+              <!-- <button type="button" id="delete-button" onclick="overview.sendDeleteRequest()" class="btn btn-danger">Delete</button>
+              <button type="button" id="print-button" onclick="overview.print()" class="btn btn-default">Print</button> -->
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <div class="hidden" id="print-page">
 
       <div class="dont-break">
@@ -205,6 +264,7 @@
 
     <script src="holder.js"></script>
     <script src="overview.js"></script>
+    <script src="js/bootstrap-colorpicker.min.js"></script>
 
     <script>
       $.get(
@@ -223,6 +283,16 @@
               overview.updateParticleTable(data);
           }
       );
+
+      $(function() {
+        $('#start-color-picker').colorpicker({
+          format: "hex"
+        });
+
+        $('#end-color-picker').colorpicker({
+          format: "hex"
+        });
+      });
     </script>
   </body>
 </html>
