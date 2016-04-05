@@ -186,6 +186,27 @@
     header('Location: ' . $_SERVER['HTTP_REFERER']);
   }
 
+  function save_question() {
+    // create question from POST data
+    $submittedQuestion = new Question(
+                              $_POST["questionId"],
+                              $_POST["question"],
+                              array($_POST["answer1"],
+                                    $_POST["answer2"],
+                                    $_POST["answer3"],
+                                    $_POST["answer4"]),
+                              $_POST["correct-answer"] - 1
+                            );
+    $submittedQuestion->saveToFile();
+
+    // create coin only after question has been saved to ensure the id has been initialized
+    $coin = new Coin($submittedQuestion->getId());
+    $coin->saveToFile();
+
+    // redirect back to previous page
+    header('Location: ' . $_SERVER['HTTP_REFERER']);
+  }
+
   /**
    * Function to handle the "/questions/<id>" REST-GET call.
    * It returns the questions json, if a question with the given id exists.
@@ -293,6 +314,9 @@
       switch ($request[0]) {
         case 'particlesystems':
           save_particle_system();
+          exit("");
+        case 'questions':
+          save_question();
           exit("");
         default:
           handle_error();
