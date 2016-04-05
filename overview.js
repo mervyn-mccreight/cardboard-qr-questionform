@@ -42,7 +42,67 @@
     });
   };
 
-  overview.updateTable = function(jsonString) {
+  overview.updateParticleTable = function(jsonString) {
+    var tableData = JSON.parse(jsonString);
+
+    $('#particle-table').bootstrapTable({
+      data: tableData.particleSystems
+    }).on('click-row.bs.table', function (e, row, $element) {
+      // TODO: onRowClick Events.
+      // overview.clearModal();
+      //
+      // $('#qr-preview').removeClass('hidden');
+      //
+      // $('input[name=questionId]').attr('value', row.id);
+      // $('#question-content').val(row.question);
+      //
+      // $('input[name=answer1]').attr('value', row.answers[0]);
+      // $('input[name=answer2]').attr('value', row.answers[1]);
+      // $('input[name=answer3]').attr('value', row.answers[2]);
+      // $('input[name=answer4]').attr('value', row.answers[3]);
+      //
+      // var correctAnswer = row.correctAnswer+1;
+      //
+      // $('input[type=radio][value=' + correctAnswer +"]").parent().addClass('active');
+      // $('input[type=radio][value=' + correctAnswer +"]").attr('checked', '');
+      //
+      // $.get(
+      //     "api.php/qrcodes/" + row.id,
+      //     {},
+      //     function(data) {
+      //         var qrCodes = JSON.parse(data);
+      //         console.log(data);
+      //         $('#question-qr').attr('src', qrCodes.question);
+      //         $('#coin-qr').attr('src', qrCodes.coin);
+      //     }
+      // );
+      //
+      // $.get(
+      //     "api.php/qrcodesprint/" + row.id,
+      //     {},
+      //     function(data) {
+      //         var qrCodes = JSON.parse(data);
+      //         console.log(data);
+      //         $('#print-question-qr').attr('src', qrCodes.question);
+      //         $('#print-coin-qr').attr('src', qrCodes.coin);
+      //     }
+      // );
+      //
+      // $('#print-title').html("Frage: " + row.question);
+      //
+      // $('#delete-button').removeClass('hidden');
+      // $('#print-button').removeClass('hidden');
+
+    });
+
+    $('#particle-table > tbody > tr').attr('data-toggle', 'modal');
+    // TODO: add correct modal link
+    $('#particle-table > tbody > tr').attr('href', '#');
+    $('#particle-table > tbody > tr').attr('style', 'cursor: pointer');
+    // data-toggle="modal" href="#question-modal"
+  };
+
+  overview.updateQuestionTable = function(jsonString) {
     var tableData = JSON.parse(jsonString);
 
     $('#question-table').bootstrapTable({
@@ -95,6 +155,7 @@
     });
 
     $('#question-table > tbody > tr').attr('data-toggle', 'modal');
+    // TODO: only do this if there is a matching row in the json (table is filled.)
     $('#question-table > tbody > tr').attr('href', '#question-modal');
     $('#question-table > tbody > tr').attr('style', 'cursor: pointer');
     // data-toggle="modal" href="#question-modal"

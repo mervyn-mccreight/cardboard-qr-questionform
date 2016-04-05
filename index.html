@@ -50,6 +50,30 @@
       <button onclick="overview.clearModal()" class="btn btn-info" data-toggle="modal" href="#question-modal">Neue Frage anlegen</button>
     </div>
 
+    <!-- header  -->
+    <div class="container">
+      <div class="page-header text-center">
+        <h1> Partikelsysteme </h1>
+      </div>
+    </div>
+
+    <!-- content  -->
+    <div class="container">
+      <table id="particle-table" data-sort-name="id" data-sort-order="asc">
+        <thead>
+          <tr>
+            <th data-field="id">ID</th>
+            <th data-field="startColor">Startfarbe</th>
+            <th data-field="endColor">Zielfarbe</th>
+          </tr>
+        </thead>
+      </table>
+
+      <hr>
+
+      <button onclick="" class="btn btn-info" data-toggle="modal" href="#">Neues Partikelsystem</button>
+    </div>
+
     <!-- modal definition -->
     <div class="modal fade" id="question-modal" tabindex="-1">
       <div class="modal-dialog" role="document">
@@ -187,7 +211,16 @@
           "api.php/questions",
           {},
           function(data) {
-              overview.updateTable(data);
+              overview.updateQuestionTable(data);
+          }
+      );
+
+      // TODO: correct api call.
+      $.get(
+          "api.php/questions",
+          {},
+          function(data) {
+              overview.updateParticleTable(data);
           }
       );
     </script>
