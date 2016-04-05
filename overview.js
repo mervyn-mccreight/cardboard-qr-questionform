@@ -59,6 +59,21 @@
     $('#particle-table').bootstrapTable({
       data: tableData.particleSystems
     }).on('click-row.bs.table', function (e, row, $element) {
+
+      overview.clearParticleModal();
+
+      $('#particle-qr-preview').removeClass('hidden');
+      $('input[name=particleSystemId]').attr('value', row.id);
+
+      $('#start-color-picker').colorpicker('setValue', row.startColor);
+      $('#end-color-picker').colorpicker('setValue', row.endColor);
+
+      // TODO: generate qr-code
+
+      // TODO: delete particle shitstem
+      // TODO: print page
+
+
       // TODO: onRowClick Events.
       // overview.clearModal();
       //
@@ -108,7 +123,7 @@
 
     $('#particle-table > tbody > tr').attr('data-toggle', 'modal');
     // TODO: add correct modal link
-    $('#particle-table > tbody > tr').attr('href', '#');
+    $('#particle-table > tbody > tr').attr('href', '#particle-modal');
     $('#particle-table > tbody > tr').attr('style', 'cursor: pointer');
     // data-toggle="modal" href="#question-modal"
   };
