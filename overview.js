@@ -68,7 +68,14 @@
       $('#start-color-picker').colorpicker('setValue', row.startColor);
       $('#end-color-picker').colorpicker('setValue', row.endColor);
 
-      // TODO: generate qr-code
+      $.get(
+          "api.php/particleqrcode/" + row.id,
+          {},
+          function(data) {
+              var json = JSON.parse(data);
+              $('#particle-qr').attr('src', json.url);
+          }
+      );
 
       // TODO: delete particle shitstem
       // TODO: print page

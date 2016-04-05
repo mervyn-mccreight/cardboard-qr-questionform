@@ -131,6 +131,25 @@
     return $qrCodes->toJson();
   }
 
+  function get_particlesystem_qrcode_by_id($id, $dimension) {
+    $filename = "particle/".$id.".json";
+
+    if (!file_exists($filename)) {
+      http_response_code(404);
+      return "";
+    }
+
+    $file = fopen($filename, "r");
+    $particleContent = fread($file, filesize($filename));
+    fclose($file);
+
+    $Url = "https://chart.googleapis.com/chart?cht=qr&choe=UTF-8"
+          ."&chs=".$dimension."x".$dimension
+          ."&chl=".urlencode($particleContent);
+
+    return '{"url":"'.$Url.'"}';
+  }
+
   /**
    * Function to handle the "/questioncount" REST-GET call.
    *
@@ -273,6 +292,8 @@
           exit(get_qrcodes_by_id($request[1], 200));
         case 'qrcodesprint':
           exit(get_qrcodes_by_id($request[1], 400));
+        case 'particleqrcode':
+          exit(get_particlesystem_qrcode_by_id($request[1], 200));
         case 'questioncount':
           exit(get_question_count());
         case 'particlesystems':
