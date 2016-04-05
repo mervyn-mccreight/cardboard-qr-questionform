@@ -77,6 +77,8 @@
           }
       );
 
+      // TODO: fill print-page img-src
+
       // TODO: delete particle shitstem
       // TODO: print page
     });
