@@ -50,7 +50,7 @@
 
       <hr>
 
-      <button onclick="overview.clearModal()" class="btn btn-info" data-toggle="modal" href="#question-modal">Neue Frage anlegen</button>
+      <button onclick="overview.clearQuestionModal()" class="btn btn-info" data-toggle="modal" href="#question-modal">Neue Frage anlegen</button>
     </div>
 
     <!-- header  -->
@@ -233,7 +233,7 @@
               <hr>
 
               <button type="submit" class="btn btn-info">Save Changes</button>
-              <button type="button" id="delete-button" onclick="overview.sendDeleteParticleRequest()" class="btn btn-danger">Delete</button>
+              <button type="button" id="particle-delete-button" onclick="overview.sendDeleteParticleRequest()" class="btn btn-danger">Delete</button>
               <!--<button type="button" id="print-button" onclick="overview.print()" class="btn btn-default">Print</button>-->
             </form>
           </div>

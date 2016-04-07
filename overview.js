@@ -1,6 +1,6 @@
 (function( overview, $, undefined ) {
 
-  overview.clearModal = function() {
+  overview.clearQuestionModal = function() {
     $('input[name=questionId]').removeAttr('value');
     $('#question-content').val('');
 
@@ -28,6 +28,8 @@
 
     $('#start-color-picker').colorpicker('setValue', '#000000');
     $('#end-color-picker').colorpicker('setValue', '#000000');
+
+    $('#particle-delete-button').addClass('hidden');
   };
 
   overview.print = function() {
@@ -93,7 +95,7 @@
 
       // TODO: fill print-page img-src
 
-      // TODO: delete particle shitstem
+      $('#particle-delete-button').removeClass('hidden');
       // TODO: print page
     });
 
