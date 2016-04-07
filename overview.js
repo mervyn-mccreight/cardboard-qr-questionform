@@ -42,6 +42,16 @@
     WinPrint.close();
   };
 
+  overview.printParticle = function() {
+    var prtContent = document.getElementById("print-page-particle");
+    var WinPrint = window.open('', '', 'left=0,top=0,toolbar=0,scrollbars=0,status=0');
+    WinPrint.document.write(prtContent.innerHTML);
+    WinPrint.document.close();
+    WinPrint.focus();
+    WinPrint.print();
+    WinPrint.close();
+  };
+
   overview.sendDeleteQuestionRequest = function() {
     var id = $('input[name=questionId]').val();
 
@@ -75,7 +85,6 @@
     $('#particle-table').bootstrapTable({
       data: tableData.particleSystems
     }).on('click-row.bs.table', function (e, row, $element) {
-
       overview.clearParticleModal();
 
       $('#particle-qr-preview').removeClass('hidden');
@@ -93,10 +102,20 @@
           }
       );
 
-      // TODO: fill print-page img-src
+      $.get(
+          "api.php/particleqrcodeprint/" + row.id,
+          {},
+          function(data) {
+              var qrCode = JSON.parse(data);
+              console.log(data);
+              $('#print-particle-qr').attr('src', qrCode.url);
+          }
+      );
+
+      $('#print-title-particle').html("Partikelsystem: " + row.startColor + " - " + row.endColor);
 
       $('#particle-delete-button').removeClass('hidden');
-      // TODO: print page
+      $('#particle-print-button').removeClass('hidden');
     });
 
     $('#particle-table > tbody > tr').attr('data-toggle', 'modal');
@@ -112,7 +131,7 @@
     $('#question-table').bootstrapTable({
       data: tableData.questions
     }).on('click-row.bs.table', function (e, row, $element) {
-      overview.clearModal();
+      overview.clearQuestionModal();
 
       $('#qr-preview').removeClass('hidden');
 

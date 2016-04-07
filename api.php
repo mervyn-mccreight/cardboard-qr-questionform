@@ -337,6 +337,8 @@
           exit(get_qrcodes_by_id($request[1], 400));
         case 'particleqrcode':
           exit(get_particlesystem_qrcode_by_id($request[1], 200));
+        case 'particleqrcodeprint':
+          exit(get_particlesystem_qrcode_by_id($request[1], 400));
         case 'questioncount':
           exit(get_question_count());
         case 'particlesystems':
