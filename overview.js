@@ -40,11 +40,25 @@
     WinPrint.close();
   };
 
-  overview.sendDeleteRequest = function() {
+  overview.sendDeleteQuestionRequest = function() {
     var id = $('input[name=questionId]').val();
 
     $.ajax({
       url: 'api.php/questions/' + id,
+      type: 'DELETE',
+      success: function(result) {
+          console.log(result);
+          location.reload(true);
+      }
+    });
+  };
+
+  overview.sendDeleteParticleRequest = function() {
+    var id = $('input[name=particleSystemId]').val();
+    console.log('api.php/particlesystems/' + id);
+
+    $.ajax({
+      url: 'api.php/particlesystems/' + id,
       type: 'DELETE',
       success: function(result) {
           console.log(result);
