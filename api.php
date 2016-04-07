@@ -209,6 +209,17 @@
   /***************************************************************************/
   /* PARTICLE SYSTEMS */
 
+  /**
+   * Function to handle the "/particlesystems/" REST-GET call to get all
+   * particle systems.
+   *
+   * It looks for all existing particle systems on the file-system and
+   * returns them all in JSON-format.
+   * The JSON will be an JSON-object, containing an JSON-object "particleSystems",
+   * which contains an array of all particle systems in JSON.
+   *
+   * @return string - The JSON answer.
+   */
   function get_particlesystems() {
     if (!file_exists("particle/")) {
       return '{"particleSystems": []}';
@@ -237,7 +248,7 @@
    *
    * @param int         $id             The particle system id.
    *
-   * @return string - The JSON-string for the question.
+   * @return string - The JSON-string for the particle system.
    */
   function get_particlesystem_by_id($id) {
     $filePath = "particle/".$id.".json";
@@ -272,6 +283,17 @@
     return "";
   }
 
+  /**
+   * Function to handle the "/particleqrcode/<id>" and "/particleqrcodeprint/<id>" REST-GET calls.
+   *
+   * It returns a JSON-string in which the google-api qr-code urls for the system.
+   * are contained in fields with respective names.
+   *
+   * @param int         $id             The particle system id.
+   * @param int         $dimension      The wanted qr-code dimension.
+   *
+   * @return string - The answer JSON-string.
+   */
   function get_particlesystem_qrcode_by_id($id, $dimension) {
     $filename = "particle/".$id.".json";
 
@@ -291,6 +313,12 @@
     return '{"url":"'.$Url.'"}';
   }
 
+  /**
+   * Function to handle the "/particlesystems" REST-POST call.
+   *
+   * It stores the transmitted particle system on the file system
+   * and redirects to the previous page.
+   */
   function save_particle_system() {
     // create particle system from POST data
     $submittedParticleSystem = new ParticleSystem(
