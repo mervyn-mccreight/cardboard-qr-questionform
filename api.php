@@ -250,6 +250,29 @@
   }
 
   /**
+   * Function to handle the "/particlesystems/<id>" REST-GET call.
+   * It returns the particle system json, if a system with the given id exists.
+   * Otherwise it returns an empty 404 HttpMessage.
+   *
+   * @param int         $id             The particle system id.
+   *
+   * @return string - The JSON-string for the question.
+   */
+  function get_particlesystem_by_id($id) {
+    $filePath = "particle/".$id.".json";
+
+    if (file_exists($filePath)) {
+      $file = fopen($filePath, "r");
+      $content = fread($file, filesize($filePath));
+      fclose($file);
+      return $content;
+    }
+
+    http_response_code(404);
+    return "";
+  }
+
+  /**
    * Function to handle an error.
    * It simply returns an empty 400 HttpMessage.
    *
@@ -307,14 +330,12 @@
               // http://localhost/cardboard-qr-marker-frontend/api.php/questions/
               exit(get_particlesystems());
             }
-            // TODO: by id
-            // exit(get_question_by_id($request[1]));
+            exit(get_particlesystem_by_id($request[1]));
           }
 
           if ($requestSize == 3) {
             if ($request[2] == "") {
-              // TODO: by id
-              // exit(get_question_by_id($request[1]));
+              exit(get_particlesystem_by_id($request[1]));
             }
           }
 
