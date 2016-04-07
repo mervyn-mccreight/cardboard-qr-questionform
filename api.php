@@ -192,6 +192,26 @@
     return "";
   }
 
+  /**
+   * Function to handle the "/particlesystems/<id>" REST-DELETE call.
+   * It deletes the particle system with the given id, if existing.
+   * Otherwise nothing happens.
+   *
+   * @param int         $id             The particle system id.
+   *
+   * @return string - an empty string.
+   */
+  function delete_particlesystem($id) {
+    $particleFilename = "particle/".$id.".json";
+
+    if (file_exists($particleFilename)) {
+      unlink($particleFilename);
+    }
+
+    return "";
+  }
+
+
   function save_particle_system() {
     // create particle system from POST data
     $submittedParticleSystem = new ParticleSystem(
@@ -348,6 +368,8 @@
       switch ($request[0]) {
         case 'questions':
           exit(delete_question($request[1]));
+        case 'particlesystems':
+          exit(delete_particlesystem($request[1]));
         default:
           handle_error();
       }
