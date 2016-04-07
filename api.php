@@ -3,6 +3,40 @@
   require_once("data.php");
 
   /**
+   * Class to hold google-api qr-code urls for a pair (question, coin).
+   *
+   * It implements the JsonSerializable-interface.
+   */
+  class QRCodeUrls implements JsonSerializable {
+    private $question;
+    private $coin;
+
+    /**
+     * Constructor.
+     *
+     * @param string      $questionUrl       The question qr-code url.
+     * @param string      $coinUrl           The coin qr-code url.
+     *
+     * @return QRCodeUrls
+     */
+    public function __construct($questionUrl, $coinUrl) {
+      $this->question = $questionUrl;
+      $this->coin = $coinUrl;
+    }
+
+    public function jsonSerialize() {
+      return get_object_vars($this);
+    }
+
+    public function toJson() {
+      return json_encode($this);
+    }
+  }
+
+  /***************************************************************************/
+  /* QUESTIONS */
+
+  /**
    * Function to handle the "/questions/" REST-GET call to get all questions.
    *
    * It looks for all existing questions on the file-system and
@@ -33,56 +67,52 @@
     return '{"questions":' . "[" . implode(",", $questions) . "]" . "}";
   }
 
-  function get_particlesystems() {
-    if (!file_exists("particle/")) {
-      return '{"particleSystems": []}';
-    }
+  /**
+   * Function to handle the "/questions/<id>" REST-GET call.
+   * It returns the questions json, if a question with the given id exists.
+   * Otherwise it returns an empty 404 HttpMessage.
+   *
+   * @param int         $id             The question id.
+   *
+   * @return string - The JSON-string for the question.
+   */
+  function get_question_by_id($id) {
+    $filePath = "questions/".$id.".json";
 
-    $particleSystems = array();
-
-    $iterator = new FilesystemIterator("particle/", FilesystemIterator::SKIP_DOTS);
-    while($iterator->valid()) {
-
-      $file = fopen($iterator->getPathname(), "r");
-      $content = fread($file, filesize($iterator->getPathname()));
+    if (file_exists($filePath)) {
+      $file = fopen($filePath, "r");
+      $content = fread($file, filesize($filePath));
       fclose($file);
-      array_push($particleSystems, $content);
-
-      $iterator->next();
+      return $content;
     }
 
-    return '{"particleSystems":' . "[" . implode(",", $particleSystems) . "]" . "}";
+    http_response_code(404);
+    return "";
   }
 
   /**
-   * Class to hold google-api qr-code urls for a pair (question, coin).
+   * Function to handle the "/questions/<id>" REST-DELETE call.
+   * It deletes the question with the given id, if existing.
+   * The same for the respective coin.
+   * Otherwise nothing happens.
    *
-   * It implements the JsonSerializable-interface.
+   * @param int         $id             The question id.
+   *
+   * @return string - an empty string.
    */
-  class QRCodeUrls implements JsonSerializable {
-    private $question;
-    private $coin;
+  function delete_question($id) {
+    $questionFilename = "questions/".$id.".json";
+    $coinFilename = "coins/".$id.".json";
 
-    /**
-     * Constructor.
-     *
-     * @param string      $questionUrl       The question qr-code url.
-     * @param string      $coinUrl           The coin qr-code url.
-     *
-     * @return QRCodeUrls
-     */
-    public function __construct($questionUrl, $coinUrl) {
-      $this->question = $questionUrl;
-      $this->coin = $coinUrl;
+    if (file_exists($questionFilename)) {
+      unlink($questionFilename);
     }
 
-    public function jsonSerialize() {
-      return get_object_vars($this);
+    if (file_exists($coinFilename)) {
+      unlink($coinFilename);
     }
 
-    public function toJson() {
-      return json_encode($this);
-    }
+    return "";
   }
 
   /**
@@ -131,25 +161,6 @@
     return $qrCodes->toJson();
   }
 
-  function get_particlesystem_qrcode_by_id($id, $dimension) {
-    $filename = "particle/".$id.".json";
-
-    if (!file_exists($filename)) {
-      http_response_code(404);
-      return "";
-    }
-
-    $file = fopen($filename, "r");
-    $particleContent = fread($file, filesize($filename));
-    fclose($file);
-
-    $Url = "https://chart.googleapis.com/chart?cht=qr&choe=UTF-8"
-          ."&chs=".$dimension."x".$dimension
-          ."&chl=".urlencode($particleContent);
-
-    return '{"url":"'.$Url.'"}';
-  }
-
   /**
    * Function to handle the "/questioncount" REST-GET call.
    *
@@ -168,63 +179,11 @@
   }
 
   /**
-   * Function to handle the "/questions/<id>" REST-DELETE call.
-   * It deletes the question with the given id, if existing.
-   * The same for the respective coin.
-   * Otherwise nothing happens.
+   * Function to handle the "/questions" REST-POST call.
    *
-   * @param int         $id             The question id.
-   *
-   * @return string - an empty string.
+   * It stores the transmitted question on the file system
+   * and redirects to the previous page.
    */
-  function delete_question($id) {
-    $questionFilename = "questions/".$id.".json";
-    $coinFilename = "coins/".$id.".json";
-
-    if (file_exists($questionFilename)) {
-      unlink($questionFilename);
-    }
-
-    if (file_exists($coinFilename)) {
-      unlink($coinFilename);
-    }
-
-    return "";
-  }
-
-  /**
-   * Function to handle the "/particlesystems/<id>" REST-DELETE call.
-   * It deletes the particle system with the given id, if existing.
-   * Otherwise nothing happens.
-   *
-   * @param int         $id             The particle system id.
-   *
-   * @return string - an empty string.
-   */
-  function delete_particlesystem($id) {
-    $particleFilename = "particle/".$id.".json";
-
-    if (file_exists($particleFilename)) {
-      unlink($particleFilename);
-    }
-
-    return "";
-  }
-
-
-  function save_particle_system() {
-    // create particle system from POST data
-    $submittedParticleSystem = new ParticleSystem(
-                              $_POST["particleSystemId"],
-                              $_POST["startColor"],
-                              $_POST["endColor"]
-                            );
-    $submittedParticleSystem->saveToFile();
-
-    // redirect back to previous page
-    header('Location: ' . $_SERVER['HTTP_REFERER']);
-  }
-
   function save_question() {
     // create question from POST data
     $submittedQuestion = new Question(
@@ -246,27 +205,29 @@
     header('Location: ' . $_SERVER['HTTP_REFERER']);
   }
 
-  /**
-   * Function to handle the "/questions/<id>" REST-GET call.
-   * It returns the questions json, if a question with the given id exists.
-   * Otherwise it returns an empty 404 HttpMessage.
-   *
-   * @param int         $id             The question id.
-   *
-   * @return string - The JSON-string for the question.
-   */
-  function get_question_by_id($id) {
-    $filePath = "questions/".$id.".json";
 
-    if (file_exists($filePath)) {
-      $file = fopen($filePath, "r");
-      $content = fread($file, filesize($filePath));
-      fclose($file);
-      return $content;
+  /***************************************************************************/
+  /* PARTICLE SYSTEMS */
+
+  function get_particlesystems() {
+    if (!file_exists("particle/")) {
+      return '{"particleSystems": []}';
     }
 
-    http_response_code(404);
-    return "";
+    $particleSystems = array();
+
+    $iterator = new FilesystemIterator("particle/", FilesystemIterator::SKIP_DOTS);
+    while($iterator->valid()) {
+
+      $file = fopen($iterator->getPathname(), "r");
+      $content = fread($file, filesize($iterator->getPathname()));
+      fclose($file);
+      array_push($particleSystems, $content);
+
+      $iterator->next();
+    }
+
+    return '{"particleSystems":' . "[" . implode(",", $particleSystems) . "]" . "}";
   }
 
   /**
@@ -291,6 +252,61 @@
     http_response_code(404);
     return "";
   }
+
+  /**
+   * Function to handle the "/particlesystems/<id>" REST-DELETE call.
+   * It deletes the particle system with the given id, if existing.
+   * Otherwise nothing happens.
+   *
+   * @param int         $id             The particle system id.
+   *
+   * @return string - an empty string.
+   */
+  function delete_particlesystem($id) {
+    $particleFilename = "particle/".$id.".json";
+
+    if (file_exists($particleFilename)) {
+      unlink($particleFilename);
+    }
+
+    return "";
+  }
+
+  function get_particlesystem_qrcode_by_id($id, $dimension) {
+    $filename = "particle/".$id.".json";
+
+    if (!file_exists($filename)) {
+      http_response_code(404);
+      return "";
+    }
+
+    $file = fopen($filename, "r");
+    $particleContent = fread($file, filesize($filename));
+    fclose($file);
+
+    $Url = "https://chart.googleapis.com/chart?cht=qr&choe=UTF-8"
+          ."&chs=".$dimension."x".$dimension
+          ."&chl=".urlencode($particleContent);
+
+    return '{"url":"'.$Url.'"}';
+  }
+
+  function save_particle_system() {
+    // create particle system from POST data
+    $submittedParticleSystem = new ParticleSystem(
+                              $_POST["particleSystemId"],
+                              $_POST["startColor"],
+                              $_POST["endColor"]
+                            );
+    $submittedParticleSystem->saveToFile();
+
+    // redirect back to previous page
+    header('Location: ' . $_SERVER['HTTP_REFERER']);
+  }
+
+
+  /***************************************************************************/
+  /* MAIN CALL HANDLING */
 
   /**
    * Function to handle an error.
@@ -348,8 +364,6 @@
 
           if ($requestSize == 2) {
             if ($request[1] == "") {
-              // special case.
-              // http://localhost/cardboard-qr-marker-frontend/api.php/questions/
               exit(get_particlesystems());
             }
             exit(get_particlesystem_by_id($request[1]));
