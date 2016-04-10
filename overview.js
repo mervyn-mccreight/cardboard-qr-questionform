@@ -118,8 +118,8 @@
       $('#particle-print-button').removeClass('hidden');
     });
 
+    // TODO: only do this if there is a matching row in the json (table is filled.)
     $('#particle-table > tbody > tr').attr('data-toggle', 'modal');
-    // TODO: add correct modal link
     $('#particle-table > tbody > tr').attr('href', '#particle-modal');
     $('#particle-table > tbody > tr').attr('style', 'cursor: pointer');
     // data-toggle="modal" href="#question-modal"
@@ -177,8 +177,8 @@
 
     });
 
-    $('#question-table > tbody > tr').attr('data-toggle', 'modal');
     // TODO: only do this if there is a matching row in the json (table is filled.)
+    $('#question-table > tbody > tr').attr('data-toggle', 'modal');
     $('#question-table > tbody > tr').attr('href', '#question-modal');
     $('#question-table > tbody > tr').attr('style', 'cursor: pointer');
     // data-toggle="modal" href="#question-modal"
